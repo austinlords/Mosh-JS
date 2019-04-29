@@ -1,40 +1,36 @@
-//duration = 0 and updates dynamically, reset, start only once, stop not twice in a row
+function mixin(target, ...sources) {
+  Object.assign(target, ...sources);
+}
 
-function Stopwatch() {
-  let startTime = 0;
-  let stopTime = 0;
-  let running = false;
-  let duration = 0;
-
-  this.start = function() {
-    if (running)
-      throw new Error('stopwatch already running');
-    
-    running = true;
-    startTime = new Date();
-  };
-
-  this.stop = function() {
-    if (!running)
-      throw new Error('stopwatch is not running');
-
-    running = false;
-    stopTime = new Date();
-    let interval = parseFloat(((stopTime - startTime) / 1000).toFixed(2));
-    duration += interval;
-  };
-
-  this.reset = function() {
-    startTime = 0;
-    stopTime = 0;
-    running = false;
-    duration = 0;
+const canEat = {
+  eat: function() {
+    this.hunger--;
+    console.log('eating');
   }
-
-  Object.defineProperty(this, 'duration', {
-    get: function() { return duration; }
-  });
-
 };
 
-const sw = new Stopwatch();
+const canWalk = {
+  walk: function() {
+    console.log('walking');
+  }
+};
+
+const canSwim = {
+  swim: function() {
+    console.log('swim');
+  }
+};
+
+function Person() {
+}
+
+mixin(Person.prototype, canEat, canWalk);
+
+const peep = new Person();
+
+function Goldfish() {
+}
+
+mixin(Goldfish.prototype, canEat, canSwim);
+
+const fish = new Goldfish();
